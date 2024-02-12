@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Role, Permission, Admin
 from django.forms import model_to_dict
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 from core.decorators.can import can
 
@@ -74,6 +75,7 @@ def roleHasPermission():
 @can("Dashboard Create")
 def createUser(request):
     try:
+        # print(request.user.has_permissions("Dashboard View"))
         # role = Role.objects.filter(name="Owner").first()
         # Admin.objects.create(first_name="Sourov", last_name="Pal", email="sourovpal35@gmail.com", password="12345678", role=role)
         print(model_to_dict(request.user))

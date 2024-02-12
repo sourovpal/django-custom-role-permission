@@ -1,3 +1,4 @@
+from typing import Any
 from django.db import models
 
 class Permission(models.Model):
@@ -29,6 +30,25 @@ class Admin(models.Model):
     password = models.CharField(max_length=255, blank=False, null=False)
     avatar = models.CharField(max_length=255, blank=True, null=True)
     role = models.OneToOneField(Role, on_delete=models.DO_NOTHING)
+    
     class Meta:
         db_table="admins"
+
+    def has_permissions(self, permission, group_name="admin"):
+        try:
+            check = self.role.permissions.filter(name=permission, guard_name=group_name).first()
+        except Exception as e:
+            check = None
+        if check:
+            return True
+        return False
+
+    def has_role(self):
+        try:
+            check = self.role
+        except Exception as e:
+            check = None
+        if check:
+            return check
+        return None
 
